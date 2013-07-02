@@ -1,12 +1,12 @@
 class QuestionLike
   def self.find_by_id(id)
-    likes_row = QuestionsDatabase.instance.execute(<<-SQL, id)
-       SELECT *
-       FROM question_likes
-       WHERE question_likes.id = (?)
-    SQL
+    likes_row = QuestionsDatabase.instance.execute(
+      QuestionsDatabase.simple_sql('question_likes','id'),id
+    )
+
     QuestionLike.new(likes_row.first)
   end
+
 
   def self.likers_for_question_id(question_id)
     user_data = QuestionsDatabase.instance.execute(<<-SQL, question_id)
