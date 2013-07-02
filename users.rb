@@ -15,11 +15,10 @@ class User
   end
 
   def self.find_by_id(id)
-    user_row = QuestionsDatabase.instance.execute(<<-SQL, id)
-      SELECT *
-      FROM users
-      WHERE users.id = (?)
-    SQL
+    user_row = QuestionsDatabase.instance.execute(
+      QuestionsDatabase.simple_sql('users','id'),id
+    )
+
     return nil if user_row.first.nil?
     User.private_new(user_row.first)
 

@@ -17,5 +17,9 @@ class QuestionsDatabase < SQLite3::Database
     self.results_as_hash = true
     self.type_translation = true
   end
+
+  def self.simple_sql(table,column)
+    "SELECT * FROM #{table} WHERE #{table}.#{column} = (?)"
+  end
 end
 

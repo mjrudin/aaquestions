@@ -1,10 +1,8 @@
 class QuestionFollower
   def self.find_by_id(id)
-    follower_row = QuestionsDatabase.instance.execute(<<-SQL, id)
-       SELECT *
-       FROM question_followers
-       WHERE question_followers.id = (?)
-    SQL
+    follower_row = QuestionsDatabase.instance.execute(
+    QuestionsDatabase.simple_sql('question_followers','id'),id
+    )
 
     QuestionFollower.new(follower_row.first)
   end

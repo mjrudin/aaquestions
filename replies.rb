@@ -1,31 +1,29 @@
 class Reply
+  def self.sql_query(column)
+    "SELECT * FROM replies WHERE replies.#{column} = (?)"
+  end
+
   def self.find_by_id(id)
-    reply_row = QuestionsDatabase.instance.execute(<<-SQL, id)
-       SELECT *
-       FROM replies
-       WHERE replies.id = (?)
-    SQL
+    reply_row = QuestionsDatabase.instance.execute(
+      QuestionsDatabase.simple_sql('replies','id'),id
+    )
 
     Reply.new(reply_row.first)
   end
 
   def self.find_by_question_id(question_id)
-    reply_data = QuestionsDatabase.instance.execute(<<-SQL, question_id)
-       SELECT *
-       FROM replies
-       WHERE replies.question_id = (?)
-    SQL
+    reply_data = QuestionsDatabase.instance.execute(
+    QuestionsDatabase.simple_sql('replies','question_id'),question_id
+    )
 
     reply_data.map { |reply_hash| Reply.new(reply_hash) }
 
   end
 
   def self.find_by_user_id(user_id)
-    reply_data = QuestionsDatabase.instance.execute(<<-SQL,user_id)
-      SELECT *
-      FROM replies
-      WHERE replies.user_id = (?)
-    SQL
+    reply_data = QuestionsDatabase.instance.execute(
+    QuestionsDatabase.simple_sql('replies','user_id'),user_id
+    )
 
     reply_data.map { |reply_hash| Reply.new(reply_hash) }
 
@@ -59,11 +57,9 @@ class Reply
 
   #What replies reply to this reply
   def child_replies
-    children = QuestionsDatabase.instance.execute(<<-SQL,@id)
-      SELECT *
-      FROM replies
-      WHERE replies.reply_id = (?)
-    SQL
+    children = QuestionsDatabase.instance.execute(
+      QuestionsDatabase.simple_sql('replies','reply_id'),@id
+    )
   end
 
   def save
