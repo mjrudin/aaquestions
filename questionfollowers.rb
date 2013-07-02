@@ -11,14 +11,18 @@ class QuestionFollower
 
   #Users that follow a particular question
   def self.followers_for_question_id(question_id)
-    follower_data = QuestionsDatabase.instance.execute(<<-SQL, question_id)
-      SELECT users.*
+    User.followers_for_question_id(question_id)
+  end
+
+  def self.most_followed_questions(n)
+    question_data = QuestionsDatabase.instance.execute(<<-SQL, n)
+      SELECT question_id, COUNT(question_id)
       FROM question_followers
-      JOIN users
-      ON question_followers.user_id = users.id
-      WHERE question_followers.question_id = (?)
+      GROUP BY question_id
+      ORDER BY COUNT(question_id) DESC
+      LIMIT (?)
     SQL
-    follower_data.map { |follower_hash| User.new(follower_hash) }
+    question_data.map { |question_hash| Question.new(question_hash) }
   end
 
   #Questions that a user follows
@@ -28,7 +32,7 @@ class QuestionFollower
       FROM question_followers
       JOIN questions
       ON questions.id = question_followers.question_id
-      WHERE questions.user_id = (?)
+      WHERE question_followers.user_id = (?)
     SQL
     questions_data.map { |question_hash| Question.new(question_hash) }
   end

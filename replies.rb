@@ -66,4 +66,21 @@ class Reply
     SQL
   end
 
+  def save
+    if @id.nil?
+      QuestionsDatabase.instance.execute(<<-SQL,@body,@reply_id,@user_id,@question_id)
+      INSERT INTO replies (body,reply_id,user_id,question_id)
+      VALUES (?,?,?,?)
+      SQL
+      @id = QuestionsDatabase.instance.execute(
+      "SELECT last_insert_rowid()")[0]['last_insert_rowid()']
+    else
+      QuestionsDatabase.instance.execute(<<-SQL,@body,@id)
+      UPDATE replies
+      SET body=(?)
+      WHERE replies.id=(?);
+      SQL
+    end
+  end
+
 end

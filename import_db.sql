@@ -59,4 +59,4 @@ INSERT INTO replies (body,reply_id,user_id,question_id)
   VALUES ('Probably chipotle.',NULL,1,2), ('Not feeling it.',1,2,2);
 
 INSERT INTO question_likes (question_id,user_id)
-  VALUES (1,2);
+  VALUES (1,2), (1,1), (2,1);
