@@ -53,7 +53,7 @@ INSERT INTO questions (title,body,user_id)
          ('Lunchtime','Whats for lunch?',2),('Dinner','Whats for dinner?',2);
 
 INSERT INTO question_followers (question_id,user_id)
-  VALUES (1,2), (2,1);
+  VALUES (1,2), (2,1), (1,1);
 
 INSERT INTO replies (body,reply_id,user_id,question_id)
   VALUES ('Probably chipotle.',NULL,1,2), ('Not feeling it.',1,2,2);

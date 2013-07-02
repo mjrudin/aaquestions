@@ -6,15 +6,16 @@ class User
       FROM users
       WHERE users.id = (?)
     SQL
-    user_row.first
+    User.new(user_row.first)
   end
 
   def self.find_by_name(fname,lname)
-    user_name = QuestionsDatabase.instance.execute(<<-SQL, fname, lname)
+    user_data = QuestionsDatabase.instance.execute(<<-SQL, fname, lname)
       SELECT *
       FROM users
       WHERE users.fname = (?) AND users.lname = (?)
     SQL
+    User.new(user_data.first)
   end
 
   attr_reader :fname, :lname
@@ -27,7 +28,7 @@ class User
 
   #What questions did this user write?
   def authored_questions
-    users_questions = Question.find_by_author_id(@id)
+    Question.find_by_author_id(@id)
   end
 
   #What replies did this user write?

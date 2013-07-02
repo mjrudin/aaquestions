@@ -7,15 +7,18 @@ class Question
        FROM questions
        WHERE questions.id = (?)
     SQL
-    question_row.first
+    Question.new(question_row.first)
   end
 
   def self.find_by_author_id(author_id)
-    questions = QuestionsDatabase.instance.execute(<<-SQL, author_id)
+    questions_data = QuestionsDatabase.instance.execute(<<-SQL, author_id)
       SELECT *
       FROM questions
       WHERE questions.user_id = (?)
     SQL
+
+    questions_data.map { |question_hash| Question.new(question_hash) }
+
   end
 
   attr_reader :title, :body, :user_id

@@ -5,23 +5,30 @@ class Reply
        FROM replies
        WHERE replies.id = (?)
     SQL
-    reply_row.first
+
+    Reply.new(reply_row.first)
   end
 
   def self.find_by_question_id(question_id)
-    replies = QuestionsDatabase.instance.execute(<<-SQL, question_id)
+    reply_data = QuestionsDatabase.instance.execute(<<-SQL, question_id)
        SELECT *
        FROM replies
        WHERE replies.question_id = (?)
     SQL
+
+    reply_data.map { |reply_hash| Reply.new(reply_hash) }
+
   end
 
   def self.find_by_user_id(user_id)
-    replies = QuestionsDatabase.instance.execute(<<-SQL,user_id)
+    reply_data = QuestionsDatabase.instance.execute(<<-SQL,user_id)
       SELECT *
       FROM replies
       WHERE replies.user_id = (?)
     SQL
+
+    reply_data.map { |reply_hash| Reply.new(reply_hash) }
+
   end
 
   attr_reader :body, :reply_id, :question_id

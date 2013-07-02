@@ -5,7 +5,7 @@ class QuestionLike
        FROM question_likes
        WHERE question_likes.id = (?)
     SQL
-    likes_row.first
+    QuestionLike.new(likes_row.first)
   end
 
   attr_reader :question_id, :user_id
